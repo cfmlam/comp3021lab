@@ -14,7 +14,7 @@ public class NoteBook {
 		Folder f=null;
 		for(Folder F1: folders)
 		{
-			if(folderName.equals(F1))
+			if(F1.getName().equals(folderName))
 				f=F1;
 		}
 		if(f==null)
@@ -22,23 +22,36 @@ public class NoteBook {
 			f = new Folder(folderName);
 			folders.add(f);
 		}
-		boolean added=false;
+		boolean Needadd=true;
 		for(Note n: f.getNotes())
 		{
-			if(note.equals(n))
+			if(n.getTitle().equals(note.getTitle()))
 			{
 				System.out.println("Creating note "+note.getTitle()+" under folder "+folderName+" failed.");
-				added=true;
-				return
+				Needadd=false;
 			}
 		}
-		if(added==false)
-		f.add(note);
+		if(Needadd==true)
+		f.getNotes().add(note);
+		
+		
+		return Needadd;
 	}
 	
 	public boolean createTextNote(String folderName, String title)
 	{
 		TextNote note = new TextNote(title);
-		return insertNote
+		return insertNote(folderName,note);
+	}
+	
+	public boolean createImageNote(String folderName, String title)
+	{
+		ImageNote note = new ImageNote(title);
+		return insertNote(folderName,note);
+	}
+	
+	public ArrayList<Folder> getFolders()
+	{
+		return folders;
 	}
 }
