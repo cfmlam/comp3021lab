@@ -90,51 +90,60 @@ public class Folder implements Comparable<Folder> {
 	{
 		keywords = keywords.toLowerCase();
 		String[] kArray = keywords.split(" ");
-		if(keywords.compareTo(kArray[0])==0)
+		ArrayList<Boolean> result = new ArrayList<Boolean>();
+		int index=0;
+		
+		while(kArray[index]!=null)
 		{
-			ArrayList<Note> result = new ArrayList<Note>();
-			for(Note F: notes)
+			if(kArray[index+1].compareTo("or")!=0 && kArray[index].compareTo("or")!=0)
+			for(Note F : notes)
 			{
 				if(F instanceof TextNote)
 				{
-					if(F.getTitle().toLowerCase().contains(keywords))
-						result.add(F);
-					else if(((TextNote) F).getContent().toLowerCase().contains(keywords))
-						result.add(F);
+					if(F.getTitle().toLowerCase().contains(kArray[index]))
+						result.add(true);
+					else if(((TextNote) F).getContent().toLowerCase().contains(kArray[index]))
+						result.add(true);
 				}
 				if(F instanceof ImageNote)
 				{
-					if(F.getTitle().toLowerCase().contains(keywords))
-						result.add(F);
+					if(F.getTitle().toLowerCase().contains(kArray[index]))
+						result.add(true);
 				}
-			}
-			return result;
-		}
-		else
-		{
-		int index=0;
-		for(String key : kArray)
-		{
-			if(key!=null)
-			index++;
-		}
-		String[] Final = new String[index];
-		int flag=0;
-		for(String key : kArray)
-		{
-			if(key.compareTo("or")==0)
-			{
-				
 			}
 			else
 			{
-				Final[flag]=key;
-				flag++;
+				if(kArray[index].compareTo("or")==0)
+				{index++;continue;}
+				else 
+				{
+					for(Note F : notes)
+					{
+						boolean temp = true;
+						if(F instanceof TextNote)
+						{
+							if(!F.getTitle().toLowerCase().contains(kArray[index]))
+							temp=false;
+							if(!F.getTitle().toLowerCase().contains(kArray[index+2]))
+							temp=false;
+							if(!((TextNote) F).getContent().toLowerCase().contains(kArray[index]))
+							temp=false;
+							if(!((TextNote) F).getContent().toLowerCase().contains(kArray[index+2]))
+							temp=false;
+						}
+						if(F instanceof ImageNote)
+						{
+							if(!F.getTitle().toLowerCase().contains(kArray[index]))
+							temp=false;
+							if(!F.getTitle().toLowerCase().contains(kArray[index+2]))
+							temp=false;
+						}
+					}
+				}
 			}
+			index++;
 		}
-		
-		return null;
-		}
+			
 	}
 	
 }

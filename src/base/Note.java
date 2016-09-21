@@ -47,7 +47,7 @@ public class Note implements Comparable<Note>{
 	public int compareTo(Note o) {
 		// TODO Auto-generated method stub
 		if(date.compareTo(o.date)>0)
-			return -1;
+				return -1;
 			else if(date.compareTo(o.date)<0)
 				return 1;
 			else
