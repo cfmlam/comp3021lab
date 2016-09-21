@@ -88,62 +88,73 @@ public class Folder implements Comparable<Folder> {
 	
 	public List<Note> searchNotes(String keywords)
 	{
+		List<Note> RNote = new ArrayList<Note>();
 		keywords = keywords.toLowerCase();
 		String[] kArray = keywords.split(" ");
-		ArrayList<Boolean> result = new ArrayList<Boolean>();
-		int index=0;
-		
-		while(kArray[index]!=null)
+		Boolean titlecheck;
+		Boolean contentcheck = false;
+		for(Note F:notes)
 		{
-			if(kArray[index+1].compareTo("or")!=0 && kArray[index].compareTo("or")!=0)
-			for(Note F : notes)
+			titlecheck = true;
+			for(int i=0; i < kArray.length; i++)
 			{
-				if(F instanceof TextNote)
+				if(kArray[i].compareTo("or")==0)
 				{
-					if(F.getTitle().toLowerCase().contains(kArray[index]))
-						result.add(true);
-					else if(((TextNote) F).getContent().toLowerCase().contains(kArray[index]))
-						result.add(true);
+					if( !(F.getTitle().toLowerCase().contains(kArray[i-1]) 
+							|| F.getTitle().toLowerCase().contains(kArray[i+1]) ))
+					{
+						titlecheck = false;
+						break;
+					}
+					else
+						continue;
 				}
-				if(F instanceof ImageNote)
+				else if( !(i-1 > 0 && kArray[i-1].compareTo("or")==0)
+						|| (i+2 < kArray.length && kArray[i+1].compareTo("or")==0))
 				{
-					if(F.getTitle().toLowerCase().contains(kArray[index]))
-						result.add(true);
+					if(!(F.getTitle().toLowerCase().contains(kArray[i])))
+					{
+						titlecheck = false;
+						break;
+					}
 				}
 			}
-			else
+			if (F instanceof TextNote)
 			{
-				if(kArray[index].compareTo("or")==0)
-				{index++;continue;}
-				else 
+				//TextNote newNote = new TextNote(F.getTitle(),((TextNote) F).getContent());
+				//String content = ((TextNote) F).getContent().toLowerCase();
+				//System.out.println(content);
+				contentcheck = true;
+				for(int i=0; i < kArray.length; i++)
 				{
-					for(Note F : notes)
+					if(kArray[i].compareTo("or")==0 )
 					{
-						boolean temp = true;
-						if(F instanceof TextNote)
+						if( !( ((TextNote) F).getContent().toLowerCase().contains(kArray[i-1]) || ((TextNote) F).getContent().toLowerCase().contains(kArray[i+1]) ))
 						{
-							if(!F.getTitle().toLowerCase().contains(kArray[index]))
-							temp=false;
-							if(!F.getTitle().toLowerCase().contains(kArray[index+2]))
-							temp=false;
-							if(!((TextNote) F).getContent().toLowerCase().contains(kArray[index]))
-							temp=false;
-							if(!((TextNote) F).getContent().toLowerCase().contains(kArray[index+2]))
-							temp=false;
+							contentcheck = false;
+							break;
 						}
-						if(F instanceof ImageNote)
+						else
+							continue;
+					}
+					else if( !((i-1 > 0 && kArray[i-1].compareTo("or")==0) || (i+2 < kArray.length && kArray[i+1].compareTo("or")==0)))
+					{
+						if(!((TextNote) F).getContent().toLowerCase().contains(kArray[i]))
 						{
-							if(!F.getTitle().toLowerCase().contains(kArray[index]))
-							temp=false;
-							if(!F.getTitle().toLowerCase().contains(kArray[index+2]))
-							temp=false;
+							contentcheck = false;
+							break;
 						}
 					}
 				}
 			}
-			index++;
+			if (titlecheck || contentcheck)
+			{
+				RNote.add(F);
+			}
 		}
-			
+		
+		return RNote;
+		
 	}
 	
 }

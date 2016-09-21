@@ -20,7 +20,7 @@ public class TextNote extends Note{
 		this.content=content;
 	}
 	
-	//overload method CreateTextNode
+	/*//overload method CreateTextNode
 	public boolean createTextNode(String folderName, String title, String content)
 	{
 		TextNote note = new TextNote(title, content);
@@ -31,5 +31,6 @@ public class TextNote extends Note{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	*/
 	
 }
