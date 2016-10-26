@@ -248,7 +248,7 @@ public class NoteBookWindow extends Application {
 				{
 					if(result.equals(""))
 					{
-						Alert alert = new Alert(AlertType.INFORMATION);
+						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("Warning");
 						alert.setContentText("Please input an valid folder name");
 						alert.showAndWait().ifPresent(rs -> {
@@ -257,7 +257,42 @@ public class NoteBookWindow extends Application {
 							}
 						});
 					}
-					else if()
+					else
+					{
+						boolean check=false;
+						for(int i = 0 ; i<noteBook.getFolders().size();i++)
+						{
+							if(result.toString().equals(noteBook.getFolders().get(i).getName().toString()))
+							{
+								check=true;
+							}
+						}
+						if(check==true)
+						{
+							Alert alert = new Alert(AlertType.ERROR);
+							alert.setTitle("Warning");
+							alert.setContentText("You already have a folder name with " + result);
+							alert.showAndWait().ifPresent(rs -> {
+								if (rs == ButtonType.OK) {
+								System.out.println("Pressed OK.");
+								}
+							});
+						}
+						else
+						{
+							Folder nF = new Folder(result.toString());
+							noteBook.getFolders().add(nF);
+							updateListView();
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Successfully Added");
+							alert.setContentText("You have successfully added a folder name with " + result.toString());
+							alert.showAndWait().ifPresent(rs -> {
+								if (rs == ButtonType.OK) {
+								System.out.println("Pressed OK.");
+								}
+							});
+						}
+					}
 				}
 			}
 	});
