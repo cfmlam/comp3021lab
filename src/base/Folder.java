@@ -90,51 +90,94 @@ public class Folder implements Comparable<Folder>,java.io.Serializable {
 		Collections.sort(notes);
 	}
 	
-public List<Note> searchNotes(String keywords){
+	public List<Note> searchNotes(String keywords)
+	{
+		List<Note> NOTE= new ArrayList<Note>();
+		String []S_array=keywords.split(" ");
+		int num_OR=0;
+		for(String s: S_array)
+		{
+			if(s.compareToIgnoreCase("or")==0)
+				num_OR+=1;
+	 
+		}
 		
-		List<Note> list = new ArrayList<Note>();
-		String[] keyword = keywords.toLowerCase().split(" ");
-		for(Note n : this.notes){
-			
-			//Just to have the method getClass on this object
-			TextNote textNote = new TextNote("tmp_to_delete");
-			
-			String title=n.toString().toLowerCase();
-			
-			int index=0;
-			int addedOnce=0;
-			while(index < keyword.length && addedOnce == 0 ){
-				if(index +1 < keyword.length && keyword[index+1]=="or"){
-					if(n.getClass()==textNote.getClass()){
-						if(title.contains(keyword[index])||((TextNote) n).getContent().contains(keyword[index])||title.contains(keyword[index+2])||((TextNote) n).getContent().contains(keyword[index+2])){
-							list.add(n);
-							addedOnce =1;
-							//System.out.println("1:"+index);
-						}
-					}else{
-						if(title.contains(keyword[index])||title.contains(keyword[index+2])){
-							list.add(n);
-							addedOnce =1;
-							//System.out.println("2:"+index);
-						}
+		int bool_len= S_array.length-2*num_OR;
+		 
+		for( Note n: notes)
+		{
+			    boolean []bArray = new boolean[bool_len]; 
+			    boolean temp; 
+			    int record=0;
+				for(int i=0, j=0;i<S_array.length && j<bool_len;++j)
+				{
+					
+					if(S_array.length==1) 
+					{
+						if(n instanceof TextNote)
+						   bArray[j]=((TextNote) n).getContent().toLowerCase().contains(S_array[i].toLowerCase())||((TextNote) n).getTitle().toLowerCase().contains(S_array[i].toLowerCase());
+						else	
+						   bArray[j] = n.getTitle().toLowerCase().contains(S_array[0].toLowerCase());
+						   ++i;	
 					}
-					index=index+3;
-				}else{
-					//Here TextNote and ImageNote
-					if(n.getClass()==textNote.getClass()){
-						if(title.contains(keyword[index])||((TextNote) n).getContent().contains(keyword[index])){
-							list.add(n);
-							addedOnce =1;
-							//System.out.println("3:"+index);
-						}
+					
+					else 
+					{
+						if(S_array[i].compareToIgnoreCase("or")!=0 && S_array[i+1].compareToIgnoreCase("or")!=0)
+					{
+						if(n instanceof TextNote)
+							bArray[j]=((TextNote) n).getContent().toLowerCase().contains(S_array[i].toLowerCase())||((TextNote) n).getTitle().toLowerCase().contains(S_array[i].toLowerCase());
+						else	
+						bArray[j]= n.getTitle().toLowerCase().contains(S_array[i].toLowerCase());
+						++i;
+						
 					}
-					index++;
+					    else if(S_array[i].compareToIgnoreCase("or")!=0 && S_array[i+1].compareToIgnoreCase("or")==0)
+					 {
+						if(n instanceof TextNote)
+						temp=((TextNote) n).getContent().toLowerCase().contains(S_array[i].toLowerCase())||((TextNote) n).getTitle().toLowerCase().contains(S_array[i].toLowerCase())
+						||((TextNote) n).getContent().toLowerCase().contains(S_array[i+2].toLowerCase())||((TextNote) n).getTitle().toLowerCase().contains(S_array[i+2].toLowerCase());
+						else
+						temp=n.getTitle().toLowerCase().contains(S_array[i].toLowerCase())||n.getTitle().toLowerCase().contains(S_array[i+2].toLowerCase());
+						
+						
+						
+						for(int k=i+2;k<S_array.length-1 ;)
+						{
+						  if(S_array[k+1].compareToIgnoreCase("or")==0)
+						  {
+							if(n instanceof TextNote)
+								temp=temp||((TextNote) n).getContent().toLowerCase().contains(S_array[k+2].toLowerCase())||n.getTitle().toLowerCase().contains(S_array[k+1].toLowerCase());
+								
+							else
+							temp=temp||n.getTitle().toLowerCase().contains(S_array[k+2].toLowerCase());
+							
+							k+=2;
+						    record=k;
+						  }
+						  else{
+							  record=k;
+							  break;
+						  }
+						}  
+						bArray[j]=temp;
+						i=record+1;
+					}
 				}
 			}
+		    int num=0;
+			for(boolean b: bArray)
+			{
+				if(b)
+				num++;		
+			}
+			
+			if(num==bool_len)
+				NOTE.add(n);
 		}
-		return list;
-	}
-	
+
+		return NOTE;
+	}	
 	
 //	public List<Note> searchNotes(String keywords)
 //	{
