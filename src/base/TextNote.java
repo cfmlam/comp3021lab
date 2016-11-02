@@ -87,6 +87,11 @@ public class TextNote extends Note{
 		}
 		return r;
 	}
+
+	public void setContent(String text) {
+		// TODO Auto-generated method stub
+		content=text;
+	}
 	
 	/*//overload method CreateTextNode
 	public boolean createTextNode(String folderName, String title, String content)
