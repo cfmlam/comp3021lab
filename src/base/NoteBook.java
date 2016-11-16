@@ -35,7 +35,22 @@ public class NoteBook implements java.io.Serializable{
 		}
 	}
 	
-	
+    public ArrayList<String> getFolderNames(){
+    	ArrayList<String> s=new ArrayList<String>();
+    	for(Folder f1:folders){
+    		if(!s.contains(f1.getName())){
+    			s.add(f1.getName());
+    		}
+    	}
+    	return s;
+    }
+    
+    public Folder addFolder(String name){
+    	Folder f=new Folder(name);
+    	folders.add(f);
+    	return f;
+    }
+    
 	public boolean save(String file)
 	{
 		FileOutputStream fos = null;

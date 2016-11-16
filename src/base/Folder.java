@@ -23,6 +23,16 @@ public class Folder implements Comparable<Folder>,java.io.Serializable {
 		notes.add(note);
 	}
 	
+	public boolean removeNote(String s){
+		for(Note n1:notes){
+			if(n1.getTitle().equals(s)){
+				notes.remove(n1);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public String getName()
 	{
 		return name;
