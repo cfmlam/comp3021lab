@@ -11,12 +11,15 @@ import javafx.scene.image.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+<<<<<<< HEAD
 import pokemon.Cell;
 import pokemon.Empty;
 import pokemon.Map;
 import pokemon.Pokemon;
 import pokemon.Station;
 import pokemon.Wall;
+=======
+>>>>>>> branch 'master' of https://github.com/cfmlam/comp3021lab.git
 
 public class PokemonScreenLAB9 extends Application {
 
